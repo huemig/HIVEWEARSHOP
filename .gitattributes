@@ -1,0 +1,8 @@
+* text=auto
+# Explicitly declare text files you want to always be normalized.
+*.replit text eol=lf
+*.nix text eol=lf
+
+# Declare any binary files that should be excluded from normalization.
+*.jpg binary
+*.png binary
