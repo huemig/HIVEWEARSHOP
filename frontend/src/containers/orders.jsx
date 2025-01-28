@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, {  useMemo, useState } from "react";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCart, updateCart } from "../redux/cart/cartslice";
@@ -25,6 +25,7 @@ const Orders = () => {
 
   const handleDeleteCartItem = (itemId) => {
     dispatch(updateCart({ quantity: 0, product: itemId }));
+    dispatch(fetchCart())
   };
 
   const debounce = (func, delay) => {
@@ -36,18 +37,18 @@ const Orders = () => {
       }, delay)
     }
   };
-  const debouncedUpdateCart = useCallback(
+  const debouncedUpdateCart = useMemo(()=>{
     debounce((itemId, quantity) => {
       dispatch(updateCart({ quantity, product: itemId }))
-    }, 3500),
-    [dispatch]
-  );
+    }, 2500);
+   }, [dispatch]);
   const handleAmountChange = (e, itemId) => {
     const value = e.target.value;
     setQuantities({...quantities, [itemId]: value });
     if(!isNaN(value) && value >= 0) {
       const quantity = value === '' ? 0 : parseInt(value, 10)
       debouncedUpdateCart(itemId, quantity);
+      dispatch(fetchCart())
     }
   }
 
@@ -99,7 +100,7 @@ const Orders = () => {
                     <div className="item-quantity">
                       Quantity: {item.quantity}
                     </div>
-                    <div className="totql-price"></div>
+                    <div className="total-price"></div>
                   </div>
 
                   <label>Count</label>

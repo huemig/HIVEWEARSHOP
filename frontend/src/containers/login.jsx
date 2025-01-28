@@ -14,10 +14,11 @@ const LogIn = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  // const [logSubmit, setLogSubmit] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('')
 
   const loginSubmit = (e) => {
     e.preventDefault();
+    setErrorMessage('')
     let signInBody = {
       name,
       email,
@@ -29,7 +30,8 @@ const LogIn = () => {
         navigate("/");
       })
       .catch((error) => {
-        console.log(error("failed to login:", error));
+        setErrorMessage(error.message);
+        console.error("failed to login", error)
       });
   };
 
@@ -62,7 +64,9 @@ const LogIn = () => {
           />
           <button type="submit">Submit</button>
         </form>
+        {errorMessage && <p className="error">{errorMessage}</p>}
       </div>
+
 
       <button onClick={() => dispatch(logOut(user))}>logout</button>
 

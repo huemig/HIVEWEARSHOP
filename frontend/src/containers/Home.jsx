@@ -7,7 +7,7 @@ import cat1 from "../assets/images/category001.png";
 import cat2 from "../assets/images/category002.png";
 import cat3 from "../assets/images/category003.png";
 import cat4 from "../assets/images/category004.png";
-
+import { useSelector } from "react-redux";
 import pls from "../assets/images/plus.svg";
 import of1 from "../assets/images/offer001.png";
 import of2 from "../assets/images/offer002.png";
@@ -17,9 +17,10 @@ import of4 from "../assets/images/offer004.png";
 // import { useSelector } from "react-redux";
 
 const Home = () => {
-  // const selector = useSelector((state) => state);
+  const user = useSelector((state) => state.user);
 
   // const products = getProducts(selector);
+  console.log(user?.user?.name) ||  console.log("no logged in user");
   return (
     <>
       <header>

@@ -2,11 +2,15 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import API from "../../api";
 
 const api = new API();
+const initialState = {
+  items: [],
+  error: null,
+};
 
 export const fetchCart = createAsyncThunk("cart/fetchCart", async () => {
   try {
     const res = await api.getGlitchCarts();
-    return res.data;
+    return res;
   } catch (error) {
     return error;
   }
@@ -15,16 +19,73 @@ export const agregar = createAsyncThunk(
   "cart/agregar",
   async ({ product, quantity }, { rejectWithValue }) => {
     try {
+      console.log("🔵 Inside agregar function:");
+      console.log("📌 Product:", product);
+      console.log("📌 Quantity:", quantity);
+
+      if (!product || typeof product !== "number") {
+        console.error(
+          "🛑 Invalid product value before sending request:",
+          product
+        );
+        throw new Error("Invalid product ID");
+      }
+      if (!quantity || typeof quantity !== "number") {
+        console.error(
+          "🛑 Invalid quantity value before sending request:",
+          quantity
+        );
+        throw new Error("Invalid quantity value");
+      }
+
       const response = await api.addGlitchCart(product, quantity);
-      return response.data;
+      console.log("✅ Response from API:", response);
+
+      return response;
     } catch (error) {
-      // Return a rejected value with the error message
+      console.error(
+        "❌ Error adding to cart:",
+        error.response ? error.response.data : error.message
+      );
       return rejectWithValue(
         error.response ? error.response.data : error.message
       );
     }
   }
 );
+
+// export const agregar = createAsyncThunk(
+//   "cart/agregar",
+//   async ({ product, quantity }, { rejectWithValue }) => {
+//     try {
+//       if (!product || !quantity) {
+//         console.error("Invalid product or quantity:", { product, quantity });
+//         throw new Error("Invalid product or quantity");
+//       }
+
+//       const response = await api.addGlitchCart(product, quantity);
+//       return response.data;
+//     } catch (error) {
+//       return rejectWithValue(
+//         error.response ? error.response.data : error.message
+//       );
+//     }
+//   }
+// );
+
+//ONNCE WORKS DO BOTTOM!!!!!
+// "cart/agregar",
+// async ({ product, quantity }, { rejectWithValue }) => {
+//   try {
+//     const response = await api.addGlitchCart(product, quantity);
+//     return response.data;
+//   } catch (error) {
+//     // Return a rejected value with the error message
+//     return rejectWithValue(
+//       error.response ? error.response.data : error.message
+//     );
+//   }
+// }
 
 // export const agregar = createAsyncThunk('cart/agregar', async ({ product, quantity }, { rejectWithValue, getState, dispatch }) => {
 //     try {
@@ -87,10 +148,7 @@ export const emptyCart = createAsyncThunk(
 
 const cartSlice = createSlice({
   name: "cart",
-  initialState: {
-    items: [],
-    error: null,
-  },
+  initialState,
   reducers: {
     deleteCart: (state, action) => {
       state.items = state.items.filter((cart) => cart.id !== action.payload);
@@ -103,14 +161,14 @@ const cartSlice = createSlice({
       .addCase(agregar.fulfilled, (state, action) => {
         // const newAddedCarts = [ ...state.results, action.payload]
 
-        state.items.push(action.payload);
+        state.items = Array.isArray(action.payload) ? action.payload : [];
 
         state.error = null;
         console.log(`this is from fulfilled ${action.payload}`);
       })
       .addCase(agregar.rejected, (state, action) => {
-        console.log(action.payload.data);
-        console.log(action.payload);
+        console.log(`-from agregar-rejected-apd ${action.payload.data}`);
+        console.log(`-from agregar-rejected-ap ${action.payload}`);
         state.error = action.error.message;
       })
       .addCase(agregar.pending, (state, action) => {
@@ -119,11 +177,8 @@ const cartSlice = createSlice({
       .addCase(fetchCart.fulfilled, (state, action) => {
         state.items = action.payload || [];
         state.error = null;
-        console.log(action.payload);
       })
-      .addCase(fetchCart.pending, (state, action) => {
-        console.log(`this from fetch pending ${action.payload}`);
-      })
+      .addCase(fetchCart.pending, (state, action) => {})
       .addCase(updateCart.fulfilled, (state, action) => {
         const index = state.items.findIndex(
           (item) => item.id === action.payload.id

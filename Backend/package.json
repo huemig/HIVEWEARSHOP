@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "cloudinary": "^1.37.3",
-    "django": "^1.0.0"
-  }
-}

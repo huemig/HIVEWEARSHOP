@@ -717,4 +717,8 @@ nav .right-nav a:hover {
   #cat {
     width: 100%;
   }
+  .error {
+    color: red;
+    margin-top: 9px;
+  }
 }

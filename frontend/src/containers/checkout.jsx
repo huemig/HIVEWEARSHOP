@@ -7,16 +7,17 @@ import { addOrder } from "../redux/checkout/checkoutslice";
 import Headers from "../components/header";
 import { fetchCart } from "../redux/cart/cartslice";
 import Footer from "../components/footer"
+import { Navigate } from "react-router-dom";
 
 const Checkout = () => {
   // const navigate = useNavigate();
-  const user = useSelector((state) => state.user.user);
+  const user = useSelector((state) => state.user);
   const cart = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
 
   
   const [newOrder, setNewOrder] = useState({
-    customer_name: user.name,
+    customer_name: user?.user.name,
     phone_number: "",
     zip_code: "",
     building: "",
@@ -42,7 +43,8 @@ const Checkout = () => {
       ...newOrder,
       total_quantity: totalQuantity,
       total_price: totalPrice,
-      user: user.id,
+
+      user: user.user.id,
     };
 
     console.log("Order Payload: ", orderPayload);
@@ -55,6 +57,10 @@ const Checkout = () => {
         building: "",
         city: "",
         state: "",
+      })
+      .unwrap()
+      .then(()=>{
+        Navigate("thankyou")
       })
     } catch (error) {
       console.log("error checking out", error)
@@ -166,7 +172,7 @@ const Checkout = () => {
           <br />
 
           <div className="row">
-            <button type="submit">Odrder</button>
+            <button type="submit">Order</button>
           </div>
         </form>
       </div>

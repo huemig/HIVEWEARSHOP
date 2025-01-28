@@ -12,7 +12,7 @@ const Products = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.user);
+  const user = useSelector((state) => state.user);
   const products = useSelector((state) => state.products.results);
   const cartItems = useSelector((state) => state.cart.items);
 
@@ -24,9 +24,7 @@ const Products = () => {
   const searchParams = new URLSearchParams(location.search);
   const category = (searchParams.get("category") || "all").trim();
   const gender = (searchParams.get("gender") || "all").trim();
-  console.log("Category:", category);
-  console.log("Gender:", gender);
-  console.log("Products:", products);
+
 
   const filteredProducts = products.filter(
     (product) =>
@@ -37,20 +35,69 @@ const Products = () => {
   console.log("filtered products:", filteredProducts);
 
   const handleAddToCart = (product) => {
-    console.log(cartItems);
-    const existingCartItem = cartItems.find(
-      (item) => item.product.id === product.id
-    );
-    console.log(existingCartItem);
+    console.log("Attempting to add to cart:", product);
+    console.log(cartItems)
+  
+    if (!product || !product.id) {
+      console.error("🛑Invalid product data before dispatch:", product);
+      return;
+    }
+  
+    const existingCartItem = cartItems.find((item) => item.product.id === product.id);
+  
     if (existingCartItem) {
       const newQuantity = existingCartItem.quantity + 1;
-      dispatch(
-        updateCart({ product: existingCartItem.id, quantity: newQuantity })
-      );
+      dispatch(updateCart({ product: existingCartItem.id, quantity: newQuantity }));
     } else {
+      console.log("🟢 Dispatching agregar with:", { product: product.id, quantity: 1 });
       dispatch(agregar({ product: product.id, quantity: 1 }));
     }
   };
+
+
+
+  
+  // START OF NEW CODE 
+  //THIS A TEMPLATE NOW
+  // const handleAddToCart = (product) => {
+  //   console.log("🟡 Attempting to add to cart:", product);
+  //   console.log("📌 Cart Items:", cartItems);
+  
+  //   if (!product || !product.id) {
+  //     console.error("🛑 Invalid product data:", product);
+  //     return;
+  //   }
+  
+  //   const existingCartItem = cartItems.find((item) => item.product?.id === product.id);
+  
+  //   if (existingCartItem) {
+  //     const newQuantity = existingCartItem.quantity + 1;
+  //     console.log(`🟢 Updating cart item:`, existingCartItem.id, "New Quantity:", newQuantity);
+  //     dispatch(updateCart({ product: existingCartItem.id, quantity: newQuantity }));
+  //   } else {
+  //     console.log(`🟢 Adding new item to cart:`, { product: product.id, quantity: 1 });
+  //     dispatch(agregar({ product: product.id, quantity: 1 }));
+  //   }
+  // };
+  
+
+  
+
+
+    // I THINK SAME 
+    // const existingCartItem = cartItems.find(
+    //   (item) => item.product.id === product.id
+    // );
+    // console.log(existingCartItem);
+    // if (existingCartItem) {
+    //   const newQuantity = existingCartItem.quantity + 1;
+    //   dispatch(
+    //     updateCart({ product: existingCartItem.id, quantity: newQuantity })
+    //   );
+    // } else {
+    //   dispatch(agregar({ product: product.id, quantity: 1 }));
+    // }
+  
   const genderSelect = (e) => {
     const selectedGender = e.target.value;
     searchParams.set("gender", selectedGender);
