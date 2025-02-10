@@ -34,8 +34,5 @@ export const productSlice = createSlice({
   },
 });
 
-// export const selectGetProducts = (state) => state.products
-// export const selecterr = (state) => state.products.error
-// export const selectstatus = (state) => state.products.status
 
 export default productSlice.reducer;

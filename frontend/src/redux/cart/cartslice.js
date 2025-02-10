@@ -19,32 +19,23 @@ export const agregar = createAsyncThunk(
   "cart/agregar",
   async ({ product, quantity }, { rejectWithValue }) => {
     try {
-      console.log("🔵 Inside agregar function:");
-      console.log("📌 Product:", product);
-      console.log("📌 Quantity:", quantity);
-
       if (!product || typeof product !== "number") {
-        console.error(
-          "🛑 Invalid product value before sending request:",
-          product
-        );
+        console.error("Invalid product value before sending request:", product);
         throw new Error("Invalid product ID");
       }
       if (!quantity || typeof quantity !== "number") {
         console.error(
-          "🛑 Invalid quantity value before sending request:",
+          "Invalid quantity value before sending request:",
           quantity
         );
         throw new Error("Invalid quantity value");
       }
 
       const response = await api.addGlitchCart(product, quantity);
-      console.log("✅ Response from API:", response);
-
       return response;
     } catch (error) {
       console.error(
-        "❌ Error adding to cart:",
+        "Error adding to cart:",
         error.response ? error.response.data : error.message
       );
       return rejectWithValue(
@@ -54,62 +45,6 @@ export const agregar = createAsyncThunk(
   }
 );
 
-// export const agregar = createAsyncThunk(
-//   "cart/agregar",
-//   async ({ product, quantity }, { rejectWithValue }) => {
-//     try {
-//       if (!product || !quantity) {
-//         console.error("Invalid product or quantity:", { product, quantity });
-//         throw new Error("Invalid product or quantity");
-//       }
-
-//       const response = await api.addGlitchCart(product, quantity);
-//       return response.data;
-//     } catch (error) {
-//       return rejectWithValue(
-//         error.response ? error.response.data : error.message
-//       );
-//     }
-//   }
-// );
-
-//ONNCE WORKS DO BOTTOM!!!!!
-// "cart/agregar",
-// async ({ product, quantity }, { rejectWithValue }) => {
-//   try {
-//     const response = await api.addGlitchCart(product, quantity);
-//     return response.data;
-//   } catch (error) {
-//     // Return a rejected value with the error message
-//     return rejectWithValue(
-//       error.response ? error.response.data : error.message
-//     );
-//   }
-// }
-
-// export const agregar = createAsyncThunk('cart/agregar', async ({ product, quantity }, { rejectWithValue, getState, dispatch }) => {
-//     try {
-//       const state = getState();
-//       const existingCartItem = state.cart.items.find(item => item.product.id === product);
-//       console.log(existingCartItem)
-
-//       if (existingCartItem) {
-//         // If the item already exists in the cart, update its quantity
-//         const newQuantity = existingCartItem.quantity + quantity;
-//         await dispatch(updateCart(existingCartItem, newQuantity));
-//         return {...existingCartItem, qunatity:newQuantity}
-//       } else {
-//         // Otherwise, add the new item to the cart
-//         const res = await api.addGlitchCart(product, quantity);
-//         return res.data
-//       }
-
-//       // Fetch updated cart data
-//     //   return await api.getGlitchCarts().then(response => response.data);
-//     } catch (error) {
-//       return rejectWithValue(error.message);
-//     }
-//   });
 
 export const updateCart = createAsyncThunk(
   "cart/updateCart",
@@ -127,7 +62,7 @@ export const updateCart = createAsyncThunk(
 
 export const emptyCart = createAsyncThunk(
   "cart/clearCart",
-  async ({ rejectWithValue, getState, dispatch }) => {
+  async (_, { rejectWithValue, getState, dispatch }) => {
     try {
       const {
         cart: { items },
@@ -159,16 +94,11 @@ const cartSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(agregar.fulfilled, (state, action) => {
-        // const newAddedCarts = [ ...state.results, action.payload]
-
         state.items = Array.isArray(action.payload) ? action.payload : [];
 
         state.error = null;
-        console.log(`this is from fulfilled ${action.payload}`);
       })
       .addCase(agregar.rejected, (state, action) => {
-        console.log(`-from agregar-rejected-apd ${action.payload.data}`);
-        console.log(`-from agregar-rejected-ap ${action.payload}`);
         state.error = action.error.message;
       })
       .addCase(agregar.pending, (state, action) => {
@@ -191,9 +121,10 @@ const cartSlice = createSlice({
 
       .addCase(updateCart.rejected, (state, action) => {
         state.error = action.error.message;
+        console.error("Update failed");
       })
       .addCase(emptyCart.fulfilled, (state, action) => {
-        state.items = action.payload;
+        state.items = initialState;
         state.error = null;
       });
   },

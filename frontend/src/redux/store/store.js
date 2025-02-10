@@ -10,7 +10,6 @@ const authMiddleware = (store) => (next) => (action) => {
   if (action.type === logIn.fulfilled.type) {
     const localUser = action.payload;
     localStorage.setItem(LOGIN_USER_KEY, JSON.stringify(localUser));
-    console.log("stored user data", localStorage.getItem(LOGIN_USER_KEY));
   } else if (action.type === "user/logout") {
     JSON.parse(localStorage.removeItem(LOGIN_USER_KEY));
   }

@@ -1,29 +1,32 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import { getOrder, addOrder } from "../redux/orders/checkoutSlice";
 import { addOrder } from "../redux/checkout/checkoutslice";
 // import { useNavigate } from "react-router-dom";
 import Headers from "../components/header";
 import { fetchCart } from "../redux/cart/cartslice";
-import Footer from "../components/footer"
-import { Navigate } from "react-router-dom";
+import Footer from "../components/footer";
+import { useNavigate } from "react-router-dom";
 
 const Checkout = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const user = useSelector((state) => state.user);
   const cart = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
 
-  
   const [newOrder, setNewOrder] = useState({
-    customer_name: user?.user.name,
+    customer_name: user?.user?.name || "",
     phone_number: "",
     zip_code: "",
     building: "",
     city: "",
     state: "",
   });
+  useEffect(() => {
+    if (user?.user?.name) {
+      setNewOrder((prev) => ({ ...prev, customer_name: user.user.name }));
+    }
+  }, [user]); // Runs when user updates
 
   useEffect(() => {
     dispatch(fetchCart());
@@ -34,7 +37,7 @@ const Checkout = () => {
     setNewOrder((prevOrder) => ({ ...prevOrder, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const totalQuantity = cart.reduce((acc, item) => acc + item.quantity, 0);
     const totalPrice = cart.reduce((acc, item) => acc + item.product.price, 0);
@@ -49,7 +52,7 @@ const Checkout = () => {
 
     console.log("Order Payload: ", orderPayload);
     try {
-    dispatch(addOrder(orderPayload));
+      await dispatch(addOrder(orderPayload)).unwrap();
       setNewOrder({
         customer_name: user.name,
         phone_number: "",
@@ -57,13 +60,10 @@ const Checkout = () => {
         building: "",
         city: "",
         state: "",
-      })
-      .unwrap()
-      .then(()=>{
-        Navigate("thankyou")
-      })
+      });
+      navigate("/thankyou");
     } catch (error) {
-      console.log("error checking out", error)
+      console.log("error checking out", error);
     }
   };
 
@@ -93,9 +93,9 @@ const Checkout = () => {
               <input
                 type="text"
                 name="customer_name"
-                value={newOrder.customer_name}
+                value={newOrder.customer_name || ""}
                 onChange={handleChange}
-                placeholder={user.name}
+                placeholder={user.name || "enter your name"}
               />
             </div>
           </div>
@@ -176,7 +176,7 @@ const Checkout = () => {
           </div>
         </form>
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 };

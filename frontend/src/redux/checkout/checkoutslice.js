@@ -3,13 +3,13 @@ import API from "../../api";
 import { emptyCart } from "../cart/cartslice";
 
 const api = new API();
-//dispatch empty cart getordrer
+
 export const addOrder = createAsyncThunk(
   "checkout/addOrder",
   async (checkoutOrderBody, { dispatch, rejectWithValue }) => {
     try {
       const response = await api.checkoutOrder(checkoutOrderBody);
-      dispatch(emptyCart());
+      await dispatch(emptyCart());
       return response.data;
     } catch (error) {
       console.log("add order error:", error.response.data);

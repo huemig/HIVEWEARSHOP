@@ -8,6 +8,7 @@ import LogIn from "./containers/login";
 import Orders from "./containers/orders";
 import Checkout from "./containers/checkout";
 import SignUp from "./containers/signup";
+import Thankyou from "./containers/thankyou";
 
 const AppComponentRouter = () => {
   return (
@@ -20,6 +21,7 @@ const AppComponentRouter = () => {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/cart" element={<Orders />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/thankyou" element={<Thankyou />} />
         </Routes>
       </BrowserRouter>
     </>

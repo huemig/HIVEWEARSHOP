@@ -43,15 +43,10 @@ export default class API {
         formData.append(key, signInBody[key]);
       }
       const response = await api.post("/users/signin/", formData);
-      return response.data; // Ensure you return the expected structure
+      return response.data;
     } catch (error) {
-      throw new Error(error.response?.data?.message || "Login failed"); // Provide a meaningful error
+      throw new Error(error.response?.data?.message || "Login failed"); 
     }
-    // const formData = new FormData();
-    // for (const key in signInBody) {
-    //   formData.append(key, signInBody[key]);
-    // }
-    // return api.post("/users/signin/", formData);
   };
 
   getProducts = async () => {
@@ -90,57 +85,16 @@ export default class API {
         { requireToken: true },
         {
           headers: {
-            "Content-Type": "multipart/form-data", // 💡 Ensure backend knows it's FormData
+            "Content-Type": "multipart/form-data", 
           },
         }
       );
       return response.data;
     } catch (error) {
-      console.error("❌ Cart Error:", error.response?.data || error.message);
+      console.error(error.response?.data || error.message);
       throw new Error(error.response?.data?.message || "Cart failed");
     }
   };
-  // addGlitchCart = async (product, quantity) => {
-  //   return api.post(
-  //     "/cart/add/",
-  //     { product, quantity }, // Send JSON instead of FormData
-  //     { requireToken: true }
-  //   );
-  // };
-  // addGlitchCart = async (product, quantity) => {
-  //   console.log("🔵 Sending API Request to add to cart:", {
-  //     product,
-  //     quantity,
-  //   });
-
-  //   if (!product || typeof product !== "number") {
-  //     console.error(
-  //       "🛑 Invalid product value before sending request:",
-  //       product
-  //     );
-  //     throw new Error("Invalid product ID");
-  //   }
-  //   if (!quantity || typeof quantity !== "number") {
-  //     console.error(
-  //       "🛑 Invalid quantity value before sending request:",
-  //       quantity
-  //     );
-  //     throw new Error("Invalid quantity value");
-  //   }
-
-  //   try {
-  //     const formData = new FormData();
-  //     formData.append("product", product);
-  //     formData.append("quantity", quantity);
-  //     return await api.post("/cart/add/", formData, { requireToken: true });
-  //   } catch (error) {
-  //     console.error(
-  //       "❌ API Error:",
-  //       error.response ? error.response.data : error.message
-  //     );
-  //     throw error;
-  //   }
-  // };
 
   updateCart = (quantity, product) => {
     const formData = new FormData();
@@ -159,17 +113,3 @@ export default class API {
     return api.get("/orders/", { requireToken: true });
   };
 }
-
-// api.interceptors.response.use(
-//     (response) => {
-//         return response;
-//     },
-//     (error) => {
-//         console.log("error.response", error);
-//         if (error.response.status === 401) {
-//             localStorage.removeItem(LOGIN_USER_KEY);
-//         }
-
-//         return Promise.reject(error);
-//     }
-// );

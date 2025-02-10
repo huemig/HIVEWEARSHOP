@@ -19,8 +19,6 @@ import of4 from "../assets/images/offer004.png";
 const Home = () => {
   const user = useSelector((state) => state.user);
 
-  // const products = getProducts(selector);
-  console.log(user?.user?.name) ||  console.log("no logged in user");
   return (
     <>
       <header>

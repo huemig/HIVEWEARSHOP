@@ -3,6 +3,14 @@
   margin: 0;
   font-family: "Poppins", sans-serif;
 }
+body {
+  /* background: linear-gradient(135deg, white, #8da9d9); */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  margin: 0;
+}
 
 /****************************
       ********Header
@@ -560,6 +568,55 @@ button:hover {
   display: table;
   clear: both;
 }
+/* .TY {
+  margin: 5rem auto;
+  width: 90%;
+  padding: 2rem;
+  text-align: center;
+  font-size: 2em;
+  color: #007bff;
+  box-shadow: 5px 5px 7px rgba(0, 0, 0, 0.05);
+  background-color: #f5f8fa;
+  border-radius: 10px;
+} */
+.TY {
+  max-width: 90%;
+  width: 500px;
+  padding: 2rem;
+  margin: 5rem auto;
+  text-align: center;
+  font-size: 2em;
+  color: #276ec6;
+  background: rgba(255, 255, 255, 1);
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+/* .links {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+} */
+.links {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.links a {
+  font-size: 2em;
+  color: white;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+/* 🔹 Hover Effect */
+.links a:hover {
+  transform: scale(1.2);
+  color: #f5c518; /* Goldish glow */
+}
 /********
       Responsive Design
       ********/
@@ -600,6 +657,9 @@ button:hover {
 
   .offer-item .btn {
     right: 5rem;
+  }
+  .TY {
+    width: 100%;
   }
 }
 
@@ -667,7 +727,7 @@ button:hover {
   }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 550px) {
   .search {
     display: none;
   }
@@ -767,6 +827,11 @@ button:hover {
 
   #cat {
     width: 100%;
+  }
+  .TY {
+    font-size: 1.5em;
+    padding: 1.5rem;
+    margin-top: 3rem;
   }
 }
 
